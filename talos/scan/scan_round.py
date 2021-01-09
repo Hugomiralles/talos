@@ -10,6 +10,10 @@ def scan_round(self):
     if self.print_params is True:
         print(self.round_params)
 
+    # for c in self.x:
+    #   print("In scan_round")
+    #   print(c.shape)
+
     # set start time
     round_start = time.strftime('%D-%H%M%S')
     start = time.time()

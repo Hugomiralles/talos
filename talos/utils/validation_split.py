@@ -14,13 +14,32 @@ def validation_split(self):
         random_shuffle(self)
 
         # deduce the midway point for input data
-        limit = int(len(self.x) * (1 - self.val_split))
+        if isinstance(self.x, list):
+            limit = int(len(self.x[0]) * (1 - self.val_split))
+            out_train = []
+            out_val = []
+            for a in self.x:
+                out_train.append(a[:limit])
+                out_val.append(a[limit:])
+            self.x_train = out_train
+            self.x_val = out_val
 
-        self.x_train = self.x[:limit]
-        self.y_train = self.y[:limit]
+        else:
+            limit = int(len(self.x) * (1 - self.val_split))
+            self.x_train = self.x[:limit]
+            self.x_val = self.x[limit:]
 
-        self.x_val = self.x[limit:]
-        self.y_val = self.y[limit:]
+        if isinstance(self.y, list):
+            out_train = []
+            out_val = []
+            for a in self.y:
+                out_train.append(a[:limit])
+                out_val.append(a[limit:])
+            self.y_train = out_train
+            self.y_val = out_val
+        else:
+            self.y_train = self.y[:limit]
+            self.y_val = self.y[limit:]
 
     return self
 
@@ -61,7 +80,18 @@ def random_shuffle(self):
         ix = randomize(self.x)
         self.x = self.x[ix]
 
-    self.y = self.y[ix]
+    if isinstance(self.y, list):
+
+        out = []
+
+        for a in self.y:
+            out.append(a[ix])
+        self.y = out
+
+    else:
+        self.y = self.y[ix]
+
+    #self.y = self.y[ix]
 
 
 def kfold(x, y, folds=10, shuffled=True):

@@ -47,6 +47,13 @@ def scan_prepare(self):
     self = validation_split(self)
 
     # set data and len
-    self._data_len = len(self.x)
+    if isinstance(self.x, list):
+      self._data_len = len(self.x[0])
+    else:
+      self._data_len = len(self.x)
+
+    # for c in self.x:
+    #   print("In scan_prepare")
+    #   print(c.shape)
 
     return self
